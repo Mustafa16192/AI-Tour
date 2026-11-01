@@ -19,6 +19,8 @@ cp .env.example .env
 npm start
 ```
 
+Use Node.js 22.13 or newer for this Expo SDK.
+
 To try the live request, fill in the three `EXPO_PUBLIC_AI_*` values in `.env`:
 
 - `EXPO_PUBLIC_AI_BASE_URL`: the OpenAI-compatible API base URL, usually ending in `/v1` (not `/chat/completions`).

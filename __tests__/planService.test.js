@@ -1,5 +1,6 @@
 import { generateText } from 'ai';
-import { generateFocusPlan, getPlanPrompt, parseFocusPlan } from '../ai/planService';
+import { generateFocusPlan, parseFocusPlan } from '../ai/planService';
+import { getPlanPrompt } from '../ai/prompt';
 
 jest.mock('../ai/client', () => ({
   createAIProvider: jest.fn(() => model => model),
@@ -27,19 +28,22 @@ const validResponse = JSON.stringify({
 });
 
 beforeEach(() => {
+  jest.clearAllMocks();
   generateText.mockResolvedValue({ text: validResponse });
 });
 
-test('PART 2 missing: sends the learner goal and time to the compatible model', async () => {
+test('sends the learner goal and time to the compatible model', async () => {
   await generateFocusPlan({ goal: 'Review ecosystems', availableMinutes: 25 });
 
   expect(generateText).toHaveBeenCalledWith(expect.objectContaining({
+    model: 'test-model',
     prompt: expect.stringContaining('Review ecosystems'),
+    maxOutputTokens: 450,
   }));
   expect(generateText.mock.calls[0][0].prompt).toContain('25 minutes');
 });
 
-test('PART 3 missing: returns validated plan data rather than raw model text', async () => {
+test('returns validated plan data rather than raw model text', async () => {
   const plan = await generateFocusPlan({ goal: 'Review ecosystems', availableMinutes: 25 });
 
   expect(plan).toEqual({
@@ -52,16 +56,21 @@ test('PART 3 missing: returns validated plan data rather than raw model text', a
   });
 });
 
-test('PART 2 missing: rejects blank goals before making a provider request', async () => {
+test('rejects blank goals before making a provider request', async () => {
   await expect(generateFocusPlan({ goal: '  ', availableMinutes: 25 })).rejects.toThrow(
     'Add a study goal before making a plan.',
   );
   expect(generateText).not.toHaveBeenCalled();
 });
 
-test('PART 3 missing: validates model JSON shape and total step time', () => {
+test('validates model JSON shape and total step time', () => {
   expect(() => parseFocusPlan('not json', 25)).toThrow('not valid JSON');
   expect(() => parseFocusPlan(JSON.stringify({ title: 'Only a title' }), 25)).toThrow('focus plan format');
+  expect(() => parseFocusPlan(JSON.stringify({
+    title: 'Bad step',
+    summary: 'One step is null.',
+    steps: [null, { title: 'Recall the idea', minutes: 10 }],
+  }), 25)).toThrow('focus plan format');
   expect(() => parseFocusPlan(JSON.stringify({
     title: 'Too long',
     summary: 'This will not fit.',
@@ -69,7 +78,7 @@ test('PART 3 missing: validates model JSON shape and total step time', () => {
   }), 25)).toThrow('focus plan format');
 });
 
-test('PART 3 missing: prompt explains the requested response format and time budget', () => {
+test('prompt explains the requested response format and time budget', () => {
   const prompt = getPlanPrompt({ goal: 'Review ecosystems', availableMinutes: 25 });
   expect(prompt).toContain('Return only a JSON object');
   expect(prompt).toContain('add up to no more than 25');

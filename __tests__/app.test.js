@@ -20,10 +20,11 @@ const focusPlan = {
 };
 
 beforeEach(() => {
+  jest.clearAllMocks();
   generateFocusPlan.mockResolvedValue(focusPlan);
 });
 
-test('PART 2/3 missing: app can request and render a structured plan', async () => {
+test('app can request and render a structured plan from the learner context', async () => {
   const screen = render(<App />);
   fireEvent.changeText(screen.getByLabelText('Study goal'), 'Review cell biology');
   fireEvent.press(screen.getByRole('button', { name: '45 min' }));
@@ -38,7 +39,7 @@ test('PART 2/3 missing: app can request and render a structured plan', async () 
   expect(screen.getByText('Compare diffusion and active transport')).toBeTruthy();
 });
 
-test('PART 5 missing: a request failure preserves the plan and offers a retry', async () => {
+test('a request failure preserves the plan and offers a retry', async () => {
   generateFocusPlan.mockRejectedValueOnce(new Error('Provider request failed.'));
   const screen = render(<App />);
   fireEvent.press(screen.getByRole('button', { name: 'Generate focus plan' }));
@@ -48,7 +49,7 @@ test('PART 5 missing: a request failure preserves the plan and offers a retry', 
   expect(screen.getByRole('button', { name: 'Generate focus plan' }).props.accessibilityState.disabled).toBe(false);
 });
 
-test('PART 5 missing: duplicate submissions are disabled during generation', async () => {
+test('duplicate submissions are disabled during generation', async () => {
   let resolveRequest;
   generateFocusPlan.mockImplementation(() => new Promise(resolve => { resolveRequest = resolve; }));
   const screen = render(<App />);
@@ -60,10 +61,11 @@ test('PART 5 missing: duplicate submissions are disabled during generation', asy
   await act(async () => resolveRequest(focusPlan));
 });
 
-test('PART 4 missing: learner can check a step and see completion progress', async () => {
+test('learner can check a step and see completion progress', async () => {
   const screen = render(<App />);
   fireEvent.press(screen.getByRole('button', { name: 'Generate focus plan' }));
-  const checkbox = await screen.findByRole('checkbox', { name: 'Mark complete' });
+  await screen.findByText('Sketch the cell membrane from memory');
+  const checkbox = screen.getAllByRole('checkbox', { name: 'Mark complete' })[0];
 
   expect(screen.getByText('0 of 2 steps complete')).toBeTruthy();
   fireEvent.press(checkbox);
