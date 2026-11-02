@@ -120,11 +120,13 @@ function inspectProgress() {
       guidance: 'In ai/config.js, keep the three EXPO_PUBLIC_AI_* settings and the missing-setting validation active.',
     },
     {
-      title: 'PART 2: OpenAI-compatible provider request uses app context',
-      complete: callsIn(client, 'createOpenAICompatible')
+      title: 'PART 2: OpenAI provider request uses app context and compatible token limits',
+      complete: callsIn(client, 'createOpenAI')
         && callsIn(service, 'generateText')
-        && functionHasCall(service, 'generateFocusPlan', 'getPlanPrompt'),
-      guidance: 'In ai/client.js, enable createOpenAICompatible(); in ai/planService.js, send the goal and available minutes with generateText().',
+        && functionHasCall(service, 'generateFocusPlan', 'getPlanPrompt')
+        && functionHasCall(service, 'generateFocusPlan', 'chat')
+        && hasIdentifier(service, 'maxCompletionTokens'),
+      guidance: 'In ai/client.js, configure createOpenAI() with the endpoint and key; in ai/planService.js, select provider.chat(model) and set openai.maxCompletionTokens.',
     },
     {
       title: 'PART 3: Model output is parsed and validated before rendering',

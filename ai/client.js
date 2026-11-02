@@ -1,10 +1,10 @@
-import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import { createOpenAI } from '@ai-sdk/openai';
 import { getAIConfig } from './config';
 
 export function createAIProvider() {
   const { apiKey, baseURL } = getAIConfig();
 
-  return createOpenAICompatible({
+  return createOpenAI({
     name: 'pocket-plan',
     apiKey,
     baseURL,

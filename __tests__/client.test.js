@@ -1,8 +1,8 @@
-import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import { createOpenAI } from '@ai-sdk/openai';
 import { createAIProvider } from '../ai/client';
 
-jest.mock('@ai-sdk/openai-compatible', () => ({
-  createOpenAICompatible: jest.fn(() => ({ chatModel: 'compatible-model-factory' })),
+jest.mock('@ai-sdk/openai', () => ({
+  createOpenAI: jest.fn(() => ({ chat: jest.fn(model => model) })),
 }));
 
 jest.mock('../ai/config', () => ({
@@ -13,10 +13,10 @@ jest.mock('../ai/config', () => ({
   })),
 }));
 
-test('creates the compatible provider from local config', () => {
+test('creates the OpenAI chat provider from local config', () => {
   createAIProvider();
 
-  expect(createOpenAICompatible).toHaveBeenCalledWith({
+  expect(createOpenAI).toHaveBeenCalledWith({
     name: 'pocket-plan',
     apiKey: 'local-development-key',
     baseURL: 'https://models.example.test/v1',

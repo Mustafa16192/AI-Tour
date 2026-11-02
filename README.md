@@ -27,7 +27,7 @@ To try the live request, fill in the three `EXPO_PUBLIC_AI_*` values in `.env`:
 - `EXPO_PUBLIC_AI_API_KEY`: a development API key for that provider.
 - `EXPO_PUBLIC_AI_MODEL`: a model identifier supported by that endpoint.
 
-The app uses `@ai-sdk/openai-compatible` and the AI SDK's `generateText` API. Compatible providers do not all support the same models or structured-output features; this tour asks for a small JSON response and validates it in the app. For a local provider, use a base URL reachable from the device; `localhost` on a phone refers to the phone, not your development computer.
+The app uses `@ai-sdk/openai` with a custom base URL and the AI SDK's `generateText` API. It explicitly selects the Chat Completions endpoint for OpenAI-compatible services. Its output limit is set with `providerOptions.openai.maxCompletionTokens`; some compatible endpoints reject the older `max_tokens` field used by the generic adapter. Compatible providers do not all support the same models or structured-output features; this tour asks for a small JSON response and validates it in the app. For a local provider, use a base URL reachable from the device; `localhost` on a phone refers to the phone, not your development computer.
 
 ## Security note: `.env` is not a mobile secret store
 

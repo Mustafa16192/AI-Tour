@@ -15,9 +15,11 @@ export async function generateFocusPlan({ goal, availableMinutes }) {
   const { model } = getAIConfig();
   const provider = createAIProvider();
   const { text } = await generateText({
-    model: provider(model),
+    model: provider.chat(model),
     prompt: getPlanPrompt({ goal: trimmedGoal, availableMinutes }),
-    maxOutputTokens: 450,
+    providerOptions: {
+      openai: { maxCompletionTokens: 450 },
+    },
   });
 
   return parseFocusPlan(text, availableMinutes);
