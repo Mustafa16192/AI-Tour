@@ -1,10 +1,10 @@
-// PART 2 — Uncomment this import to enable the OpenAI-compatible SDK.
-// import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+// PART 2 — Uncomment this import to enable the AI SDK OpenAI provider.
+// import { createOpenAI } from '@ai-sdk/openai';
 // import { getAIConfig } from './config';
 
 export function createAIProvider() {
   // ======================================================
-  // PART 2 — CREATE AN OPENAI-COMPATIBLE PROVIDER
+  // PART 2 — CREATE AN OPENAI CHAT PROVIDER
   //
   // WHY: One client configuration lets the app speak to different compatible
   //      endpoints without changing the screen.
@@ -17,7 +17,7 @@ export function createAIProvider() {
   // ======================================================
   /* Replace this starter error with the enabled provider setup:
   const { apiKey, baseURL } = getAIConfig();
-  return createOpenAICompatible({
+  return createOpenAI({
     name: 'pocket-plan',
     apiKey,
     baseURL,

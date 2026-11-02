@@ -14,7 +14,8 @@ export async function generateFocusPlan({ goal, availableMinutes }) {
   // WHY: The model should receive the learner's goal and their time limit.
   // PRODUCT QUESTION: What app-specific context improves the result?
   // DO: Uncomment the imports at the top of this file, then uncomment this
-  //     request block to call generateText with the configured provider.
+  //     request block. Select the Chat Completions model and set the output
+  //     limit with openai.maxCompletionTokens to avoid legacy max_tokens.
   // VERIFY: Mock generateText and confirm the goal and time appear in the prompt.
   // NEXT: Search for "PART 3 — VALIDATE STRUCTURED OUTPUT" below.
   // ======================================================
@@ -22,8 +23,11 @@ export async function generateFocusPlan({ goal, availableMinutes }) {
   const { model } = getAIConfig();
   const provider = createAIProvider();
   const { text } = await generateText({
-    model: provider(model),
+    model: provider.chat(model),
     prompt: getPlanPrompt({ goal, availableMinutes }),
+    providerOptions: {
+      openai: { maxCompletionTokens: 450 },
+    },
   });
   return text;
   */

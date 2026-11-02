@@ -2,7 +2,7 @@ import { generateText } from 'ai';
 import { generateFocusPlan, getPlanPrompt, parseFocusPlan } from '../ai/planService';
 
 jest.mock('../ai/client', () => ({
-  createAIProvider: jest.fn(() => model => model),
+  createAIProvider: jest.fn(() => ({ chat: jest.fn(model => model) })),
 }));
 
 jest.mock('../ai/config', () => ({
@@ -27,15 +27,19 @@ const validResponse = JSON.stringify({
 });
 
 beforeEach(() => {
+  jest.clearAllMocks();
   generateText.mockResolvedValue({ text: validResponse });
 });
 
-test('PART 2 missing: sends the learner goal and time to the compatible model', async () => {
+test('PART 2 missing: sends context and uses the compatible max completion token field', async () => {
   await generateFocusPlan({ goal: 'Review ecosystems', availableMinutes: 25 });
 
   expect(generateText).toHaveBeenCalledWith(expect.objectContaining({
+    model: 'test-model',
     prompt: expect.stringContaining('Review ecosystems'),
+    providerOptions: { openai: { maxCompletionTokens: 450 } },
   }));
+  expect(generateText.mock.calls[0][0]).not.toHaveProperty('maxOutputTokens');
   expect(generateText.mock.calls[0][0].prompt).toContain('25 minutes');
 });
 

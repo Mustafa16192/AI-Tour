@@ -15,7 +15,7 @@ const DEFAULT_ENV = {
 //     .env is ignored by Git. Review the key warning in README.md.
 // VERIFY: Run npm run test:infrastructure; missing settings should explain
 //         which local values need to be filled.
-// NEXT: Search for "PART 2 — CREATE AN OPENAI-COMPATIBLE PROVIDER" in ai/client.js.
+// NEXT: Search for "PART 2 — CREATE AN OPENAI CHAT PROVIDER" in ai/client.js.
 // ======================================================
 export function getAIConfig(env = DEFAULT_ENV) {
   const missing = Object.entries(env)

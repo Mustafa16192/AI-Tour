@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "@ai-sdk/openai-compatible": "^3.0.82",
+    "@ai-sdk/openai": "^4.0.106",
     "ai": "^7.0.159",
     "expo": "~57.0.31",
     "expo-status-bar": "~57.0.1",
@@ -19,11 +19,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --runInBand",
-    "test:infrastructure": "jest --runInBand --runTestsByPath __tests__/infrastructure/projectInfrastructure.test.js",
+    "test:infrastructure": "jest --runInBand --runTestsByPath __tests__/infrastructure/projectInfrastructure.test.js && npm run test:provider-contract",
+    "test:provider-contract": "node scripts/check-provider-payload.mjs",
     "check-progress": "node scripts/check-progress.js",
     "check-progress:report": "node scripts/check-progress.js --report-only",
     "lint": "expo lint",
-    "verify": "npm run check-progress && npm run lint && npm test"
+    "verify": "npm run check-progress && npm run lint && npm test && npm run test:provider-contract"
   },
   "private": true,
   "devDependencies": {
