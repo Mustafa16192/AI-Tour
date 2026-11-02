@@ -1,7 +1,10 @@
+import { getPlanPrompt } from './prompt';
 // PART 2 — Uncomment these imports when you enable the request implementation.
-// import { generateText } from 'ai';
-// import { createAIProvider } from './client';
-// import { getAIConfig } from './config';
+import { generateText } from 'ai';
+import { createAIProvider } from './client';
+import { getAIConfig } from './config';
+
+export { getPlanPrompt } from './prompt';
 
 export async function generateFocusPlan({ goal, availableMinutes }) {
   if (!goal || !goal.trim()) {
@@ -19,8 +22,7 @@ export async function generateFocusPlan({ goal, availableMinutes }) {
   // VERIFY: Mock generateText and confirm the goal and time appear in the prompt.
   // NEXT: Search for "PART 3 — VALIDATE STRUCTURED OUTPUT" below.
   // ======================================================
-  /* PART 2 — Remove this block's opening and closing comment markers:
-  const { model } = getAIConfig();
+    const { model } = getAIConfig();
   const provider = createAIProvider();
   const { text } = await generateText({
     model: provider.chat(model),
@@ -29,10 +31,9 @@ export async function generateFocusPlan({ goal, availableMinutes }) {
       openai: { maxCompletionTokens: 450 },
     },
   });
-  return text;
-  */
+  return parseFocusPlan(text, availableMinutes);
 
-  throw new Error('PART 2 is not enabled yet. Connect the planner to the AI service.');
+
 }
 
 // ======================================================
@@ -47,7 +48,6 @@ export async function generateFocusPlan({ goal, availableMinutes }) {
 // VERIFY: Valid JSON becomes a plan; missing fields and invalid step times fail.
 // NEXT: Search for "PART 4 — MAKE THE RESULT AN APP FEATURE" in App.js.
 // ======================================================
-/*
 export function parseFocusPlan(text, availableMinutes) {
   let value;
   try {
@@ -76,14 +76,4 @@ export function parseFocusPlan(text, availableMinutes) {
     summary: value.summary.trim(),
     steps: steps.map(step => ({ title: step.title.trim(), minutes: step.minutes })),
   };
-}
-*/
-
-export function getPlanPrompt({ goal, availableMinutes }) {
-  return `Create a short study focus plan. Return only a JSON object with this exact shape: {"title":"...","summary":"...","steps":[{"title":"...","minutes":10}]}. Include 2 to 5 actionable steps. The step minutes must be positive whole numbers and add up to no more than ${availableMinutes}. Goal: ${goal.trim()}. Available time: ${availableMinutes} minutes.`;
-}
-
-// PART 3 — Replace this TODO stub with the parser shown above.
-export function parseFocusPlan() {
-  throw new Error('PART 3 is not enabled yet. Validate the model response before showing it.');
 }

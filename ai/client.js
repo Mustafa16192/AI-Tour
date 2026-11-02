@@ -1,6 +1,6 @@
 // PART 2 — Uncomment this import to enable the AI SDK OpenAI provider.
-// import { createOpenAI } from '@ai-sdk/openai';
-// import { getAIConfig } from './config';
+import { createOpenAI } from '@ai-sdk/openai';
+import { getAIConfig } from './config';
 
 export function createAIProvider() {
   // ======================================================
@@ -15,14 +15,12 @@ export function createAIProvider() {
   // VERIFY: The client is configured with the local endpoint and API key.
   // NEXT: Search for "PART 2 — SEND A CONTEXTUAL REQUEST" in ai/planService.js.
   // ======================================================
-  /* Replace this starter error with the enabled provider setup:
-  const { apiKey, baseURL } = getAIConfig();
+    const { apiKey, baseURL } = getAIConfig();
   return createOpenAI({
     name: 'pocket-plan',
     apiKey,
     baseURL,
   });
-  */
 
-  throw new Error('PART 2 is not enabled yet. Configure the OpenAI-compatible provider.');
+
 }

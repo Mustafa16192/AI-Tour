@@ -56,3 +56,9 @@ npm run test:infrastructure
 ```
 
 The complete reference branch runs the full suite with `npm run verify`. No automated test contacts an AI provider.
+
+## Individual tour completion — Mustafa Ali Mirza
+
+Completed all five lessons. `npm run verify` passes all five progress checks, lint, 13 Jest tests, and the offline provider-payload check. The prompt now lives in a separate module so infrastructure tests can inspect it without loading the live AI SDK. The checklist test waits for the generated plan and selects a checkbox from the list before testing completion. Existing behavior assertions are preserved.
+
+No live provider request was made. Add your own limited development credentials to the ignored `.env` to exercise the provider.

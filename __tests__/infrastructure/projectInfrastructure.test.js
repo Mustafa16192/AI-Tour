@@ -2,11 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import App from '../../App';
 import { getAIConfig } from '../../ai/config';
-import { getPlanPrompt } from '../../ai/planService';
+import { getPlanPrompt } from '../../ai/prompt';
 
 jest.mock('../../ai/planService', () => ({
   generateFocusPlan: jest.fn(),
-  getPlanPrompt: jest.requireActual('../../ai/planService').getPlanPrompt,
 }));
 
 jest.mock('react-native-safe-area-context', () => require('react-native-safe-area-context/jest/mock').default);
